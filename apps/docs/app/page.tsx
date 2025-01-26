@@ -19,7 +19,6 @@ const ThemeImage = (props: Props) => {
 };
 
 export default function Home() {
-  console.log('process.env.NEXT_PUBLIC_ANALYTICS_ID:', process.env.NEXT_PUBLIC_ANALYTICS_ID)
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -34,7 +33,7 @@ export default function Home() {
         />
         <ol>
           <li>
-            Get started by editing <code>apps/docs/app/page.tsx</code>
+            Get started by editing <code>apps/docs/app/page.tsx {process.env.NEXT_PUBLIC_ANALYTICS_ID ?? 'undefined'}</code>
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
