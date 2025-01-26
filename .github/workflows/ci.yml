@@ -76,6 +76,9 @@ jobs:
       #   a) re-run `pnpm install`, or
       #   b) use caching techniques or artifact sharing.
       # This depends on your monorepo structure and preference.
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Run lint
         run: pnpm lint
 
@@ -99,6 +102,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Run tests
         run: pnpm test
