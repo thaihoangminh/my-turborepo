@@ -14,9 +14,6 @@ concurrency:
 jobs:
   cache-and-install:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 20 ]
 
     # To use Remote Caching, uncomment the next lines and follow the steps below.
     env:
@@ -40,20 +37,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 20 ]
     needs: [cache-and-install]
     steps:
       - name: Check out code
@@ -64,10 +58,10 @@ jobs:
         with:
           run_install: false
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: 'pnpm'
 
       # We skip `pnpm install` here because the "needs: [cache-and-install]" ensures
@@ -77,16 +71,13 @@ jobs:
       #   b) use caching techniques or artifact sharing.
       # This depends on your monorepo structure and preference.
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Run lint
         run: pnpm lint
 
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 20 ]
     needs: [cache-and-install, lint] # runs after lint completes
     steps:
       - name: Check out code
@@ -97,14 +88,14 @@ jobs:
         with:
           run_install: false
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
         run: pnpm test
