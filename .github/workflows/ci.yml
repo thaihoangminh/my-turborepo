@@ -58,46 +58,46 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node_modules-
 
-lint:
-  runs-on: ubuntu-latest
-  strategy:
-    matrix:
-      node-version: [ 20 ]
-  needs: [cache-and-install]
-  steps:
-    - name: Check out code
-      uses: actions/checkout@v4
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 20 ]
+    needs: [cache-and-install]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
 
-    - name: Install pnpm
-      uses: pnpm/action-setup@v4
-      with:
-        run_install: false
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
 
-    # Restore node_modules from the cache if available
-    - name: Restore node_modules
-      uses: actions/cache@v4
-      with:
-        path: |
-          **/node_modules
-        key: ${{ runner.os }}-node_modules-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-node_modules-
+      # Restore node_modules from the cache if available
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-node_modules-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+  
 
-
-    # We skip `pnpm install` here because the "needs: [cache-and-install]" ensures
-    # dependencies were already installed in that job. However, if you need the
-    # node_modules in this job, you can either:
-    #   a) re-run `pnpm install`, or
-    #   b) use caching techniques or artifact sharing.
-    # This depends on your monorepo structure and preference.
-    - name: Run lint
-      run: pnpm lint
+      # We skip `pnpm install` here because the "needs: [cache-and-install]" ensures
+      # dependencies were already installed in that job. However, if you need the
+      # node_modules in this job, you can either:
+      #   a) re-run `pnpm install`, or
+      #   b) use caching techniques or artifact sharing.
+      # This depends on your monorepo structure and preference.
+      - name: Run lint
+        run: pnpm lint
 
 #test:
 #  runs-on: ubuntu-latest
