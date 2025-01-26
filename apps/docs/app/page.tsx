@@ -19,6 +19,7 @@ const ThemeImage = (props: Props) => {
 };
 
 export default function Home() {
+  console.log('process.env.NEXT_PUBLIC_ANALYTICS_ID:', process.env.NEXT_PUBLIC_ANALYTICS_ID)
   return (
     <div className={styles.page}>
       <main className={styles.main}>
