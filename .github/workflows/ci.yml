@@ -41,9 +41,6 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
-      - name: Log output of changes job
-        run: echo ${{ fromJSON(needs.changes.outputs) }}
-
       - name: Log output of ui-package
         run: echo ${{needs.changes.outputs.ui-package}}
 
