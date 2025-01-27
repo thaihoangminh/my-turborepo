@@ -145,8 +145,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build
+      - name: Build all apps
+        if: ${{ needs.changes.outputs.ui-package == 'true' }}
         run: pnpm build
+
+      - name: Build docs
+        if: needs.changes.outputs.ui-package == 'false' && needs.changes.outputs.docs == 'true'
+        run: pnpm build -F docs
+
+      - name: Build web
+        if: needs.changes.outputs.ui-package == 'false' && needs.changes.outputs.web == 'true'
+        run: pnpm build -F web
 
 #  deploy:
 #    runs-on: ubuntu-latest
