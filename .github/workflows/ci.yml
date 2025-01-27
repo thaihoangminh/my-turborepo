@@ -24,7 +24,6 @@ jobs:
       pull-requests: read
     # Set job outputs to values from filter step
     outputs:
-      apps: ${{ steps.filter.outputs.apps }}
       docs: ${{ steps.filter.outputs.docs }}
       web: ${{ steps.filter.outputs.web }}
       ui-package: ${{ steps.filter.outputs.packages }}
@@ -34,7 +33,6 @@ jobs:
         id: filter
         with:
           filters: |
-            apps: apps/**
             docs: apps/docs/**
             web: apps/web/**
             ui-package: packages/ui/**
@@ -109,8 +107,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run tests
+      - name: Build all apps
+        if: ${{ needs.changes.outputs.ui-package == 'true' }}
         run: pnpm test
+
+      - name: Build docs
+        if: needs.changes.outputs.ui-package == 'false' && needs.changes.outputs.docs == 'true'
+        run: pnpm test -F docs
+
+      - name: Build web
+        if: needs.changes.outputs.ui-package == 'false' && needs.changes.outputs.web == 'true'
+        run: pnpm test -F web
 
   build:
     name: Build
