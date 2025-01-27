@@ -3,24 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
-    "./button": {
-      "types": "./src/button.tsx",
-      "import": "./dist/button.mjs",
-      "require": "./dist/button.js"
-    },
-    "./card": {
-      "types": "./src/card.tsx",
-      "import": "./dist/card.mjs",
-      "require": "./dist/card.js"
-    },
-    "./code": {
-      "types": "./src/code.tsx",
-      "import": "./dist/code.mjs",
-      "require": "./dist/code.js"
-    }
+    "./button": "./src/button.tsx",
+    "./card": "./src/card.tsx",
+    "./code": "./src/code.tsx"
   },
   "scripts": {
-    "build": "tsup",
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
@@ -32,7 +19,6 @@
     "@types/node": "^22.10.9",
     "@types/react": "19.0.8",
     "@types/react-dom": "19.0.3",
-    "tsup": "^8.3.6",
     "typescript": "5.7.3"
   },
   "dependencies": {
