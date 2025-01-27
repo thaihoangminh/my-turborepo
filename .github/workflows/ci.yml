@@ -36,12 +36,12 @@ jobs:
             docs: apps/docs/**
             web: apps/web/**
             ui-package: packages/ui/**
-
-  lint:
+  
+  setup:
     needs: changes
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Install pnpm
@@ -49,7 +49,7 @@ jobs:
         with:
           run_install: false
 
-      - name: Cache turbo build setup
+      - name: Cache Turbo
         uses: actions/cache@v4
         with:
           path: .turbo
@@ -57,16 +57,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Use Node.js 22
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 22.x
           cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Run lint
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run linting
         run: pnpm lint
 
   test:
