@@ -26,7 +26,7 @@ jobs:
     outputs:
       docs: ${{ steps.filter.outputs.docs }}
       web: ${{ steps.filter.outputs.web }}
-      ui-package: ${{ steps.filter.outputs.packages }}
+      ui-package: ${{ steps.filter.outputs.ui-package }}
     steps:
       # For pull requests it's not necessary to checkout the code
       - uses: dorny/paths-filter@v3
