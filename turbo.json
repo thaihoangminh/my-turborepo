@@ -13,7 +13,7 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "test": {
-      "outputs": []
+      "dependsOn": ["^test"]
     },
     "test:watch": {
       "cache": false,
