@@ -112,7 +112,7 @@ jobs:
         run: pnpm test
 
       - name: Build docs
-        if: needs.changes.outputs.ui-package == 'false' && needs.changes.outputs.docs == 'true'
+        if: ${{ (needs.changes.outputs.ui-package == 'false') && (needs.changes.outputs.docs == 'true') }}
         run: pnpm test -F docs
 
       - name: Build web
