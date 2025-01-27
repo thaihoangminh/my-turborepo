@@ -44,6 +44,12 @@ jobs:
       - name: Log output of changes job
         run: echo ${{needs.changes.outputs}}
 
+      - name: Log output of ui-package
+        run: echo ${{needs.changes.outputs.ui-package}}
+
+      - name: Log output of ui-package
+        run: echo ${{needs.changes.outputs.docs}}
+
       - name: Check out code
         uses: actions/checkout@v4
 
@@ -107,15 +113,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build all apps
+      - name: Test all apps
         if: ${{ needs.changes.outputs.ui-package == 'true' }}
         run: pnpm test
 
-      - name: Build docs
+      - name: Test docs
         if: ${{ (needs.changes.outputs.ui-package == 'false') && (needs.changes.outputs.docs == 'true') }}
         run: pnpm test -F docs
 
-      - name: Build web
+      - name: Test web
         if: needs.changes.outputs.ui-package == 'false' && needs.changes.outputs.web == 'true'
         run: pnpm test -F web
 
