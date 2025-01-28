@@ -39,7 +39,7 @@ jobs:
             web: apps/web/**
             ui-package: packages/ui/**
 
-  lint:
+  lint-and-type-check:
     runs-on: ubuntu-latest
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.docs == 'true' || needs.detect-changes.outputs.web == 'true' || needs.detect-changes.outputs.ui-package == 'true' }}
