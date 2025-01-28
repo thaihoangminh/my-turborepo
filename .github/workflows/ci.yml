@@ -28,7 +28,7 @@ jobs:
       web: ${{ steps.filter.outputs.web }}
       ui-package: ${{ steps.filter.outputs.ui-package }}
     steps:
-      # For pull requests it's not necessary to checkout the code
+      # For pull requests it's not necessary to check out the code
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -57,10 +57,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-turbo-
 
-      - name: Setup Node.js
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -103,9 +103,9 @@ jobs:
         run: pnpm test
 
       - name: Test docs
-        if: ${{ (needs.changes.outputs.ui-package != 'true') && (needs.changes.outputs.docs == 'true') }}
+        if: ${{ needs.changes.outputs.ui-package != 'true' && needs.changes.outputs.docs == 'true' }}
         run: pnpm test -F docs
 
       - name: Test web
-        if: needs.changes.outputs.ui-package != 'true' && needs.changes.outputs.web == 'true'
+        if: ${{ needs.changes.outputs.ui-package != 'true' && needs.changes.outputs.web == 'true' }}
         run: pnpm test -F web
