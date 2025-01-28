@@ -42,10 +42,25 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     needs: detect-changes
+#    strategy:
+#      matrix:
+#        changed-app: [ docs, web, ui-package ]
+#    if: ${{ needs.detect-changes.outputs.docs == 'false' || needs.detect-changes.outputs.web == 'false' || needs.detect-changes.outputs.ui-package == 'false' }}
     strategy:
       matrix:
         changed-app: [ docs, web, ui-package ]
-    if: ${{ needs.detect-changes.outputs.docs == 'false' || needs.detect-changes.outputs.web == 'false' || needs.detect-changes.outputs.ui-package == 'false' }}
+        # Include only apps that have changes
+        include:
+          - changed-app: docs
+            condition: ${{ needs.detect-changes.outputs.docs == 'true' }}
+            scope: docs
+          - changed-app: web
+            condition: ${{ needs.detect-changes.outputs.web == 'true' }}
+            scope: web
+          - changed-app: ui-package
+            condition: ${{ needs.detect-changes.outputs.ui-package == 'true' }}
+            scope: ui-package
+    if: ${{ matrix.condition }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -79,7 +94,7 @@ jobs:
         run: pnpm install
 
       - name: Run linting
-        run: pnpm lint
+        run: pnpm lint -F ${{ matrix.scope }}
 
   test:
     runs-on: ubuntu-latest
