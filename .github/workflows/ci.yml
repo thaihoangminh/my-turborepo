@@ -38,9 +38,10 @@ jobs:
             docs: apps/docs/**
             web: apps/web/**
             ui-package: packages/ui/**
-  
+
   lint:
     needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.docs == 'true' || needs.detect-changes.outputs.web == 'true' || needs.detect-changes.outputs.ui-package == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Logs
