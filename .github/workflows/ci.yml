@@ -47,11 +47,11 @@ jobs:
         changed-app: [ docs, web, ui-package ]
 #    if: ${{ fromJSON(needs.detect-changes.outputs[matrix.changed-app]) == 'true' }}
     steps:
-      - name: Logs
-        uses: echo "${{ needs.detect-changes.outputs[matrix.changed-app] }}"
-
       - name: Logs 2
         uses: echo "${{ matrix.changed-app }}"
+
+#      - name: Logs
+#        uses: echo "${{ needs.detect-changes.outputs[matrix.changed-app] }}"
 
       - name: Checkout code
         uses: actions/checkout@v4
