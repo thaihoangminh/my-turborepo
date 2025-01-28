@@ -41,7 +41,6 @@ jobs:
   
   lint:
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Logs
