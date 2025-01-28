@@ -28,7 +28,9 @@ jobs:
       web: ${{ steps.filter.outputs.web }}
       ui-package: ${{ steps.filter.outputs.ui-package }}
     steps:
-      # For pull requests it's not necessary to check out the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - uses: dorny/paths-filter@v3
         id: filter
         with:
