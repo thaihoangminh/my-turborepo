@@ -41,8 +41,12 @@ jobs:
   
   lint:
     needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Logs
+        run: echo ${{ needs.detect-changes.outputs }}
+
       - name: Checkout code
         uses: actions/checkout@v4
 
