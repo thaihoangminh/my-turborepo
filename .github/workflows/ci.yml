@@ -50,10 +50,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Logs 2
-        uses: echo ${{ matrix.changed-app }}
+        run: echo ${{ matrix.changed-app }}
 
-#      - name: Logs
-#        uses: echo "${{ needs.detect-changes.outputs[matrix.changed-app] }}"
+      - name: Logs
+        run: echo "${{ needs.detect-changes.outputs[matrix.changed-app] }}"
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
