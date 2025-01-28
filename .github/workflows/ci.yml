@@ -45,7 +45,7 @@ jobs:
     strategy:
       matrix:
         changed-app: [ docs, web, ui-package ]
-    if: ${{ needs.detect-changes.outputs[matrix.changed-app] == 'true' }}
+    if: ${{ needs.detect-changes.outputs[format('{0}', matrix.changed-app)] == 'true' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
