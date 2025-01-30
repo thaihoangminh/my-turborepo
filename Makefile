@@ -31,5 +31,6 @@ stop-development: ## Stop the development docker container.
 #	docker compose -f docker/production/compose.yaml up -d
 #
 #.PHONY: stop-production
+
 #stop-production: ## Stop the production docker container.
 #	docker compose -f docker/production/compose.yaml down
