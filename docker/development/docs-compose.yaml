@@ -1,0 +1,8 @@
+services:
+  docs-development:
+    build:
+      context: ../../
+      dockerfile: docker/development/docs.dockerfile
+    image: docs-development
+    ports:
+      - "3001:3000"
