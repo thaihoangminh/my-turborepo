@@ -1,11 +1,10 @@
-FROM node:22-alpine AS base
+FROM node:22.13.1-alpine3.20 AS base
 
 # Remote Caching
 ARG TURBO_TEAM
-ENV TURBO_TEAM=$TURBO_TEAM
-
 ARG TURBO_TOKEN
-ENV TURBO_TOKEN=$TURBO_TOKEN
+ENV TURBO_TEAM=$TURBO_TEAM \
+    TURBO_TOKEN=$TURBO_TOKEN
 # End Remote Caching
 
 FROM base AS build
@@ -56,8 +55,9 @@ COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/.next/standal
 COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/.next/static ./apps/docs/.next/static
 COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/public ./apps/docs/public
 
+ENV NODE_ENV=production \
+    PORT=3000
+
 EXPOSE 3000
 
-ENV PORT=3000
-
-CMD HOSTNAME="0.0.0.0" node apps/docs/server.js
+CMD ["node", "apps/docs/server.js"]
