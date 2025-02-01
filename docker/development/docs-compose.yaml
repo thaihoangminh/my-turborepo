@@ -3,6 +3,14 @@ services:
     build:
       context: ../../
       dockerfile: docker/development/docs.dockerfile
-    image: docs-development
+      secrets:
+        - TURBO_TOKEN
+    environment:
+      TURBO_TEAM: ${TURBO_TEAM}
+    image: docs-development:latest
     ports:
       - "3001:3000"
+
+secrets:
+  TURBO_TOKEN:
+    file: ./turbo_token.txt

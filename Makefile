@@ -1,6 +1,6 @@
 .PHONY: build-development
 build-development: ## Build the development docker image.
-	docker compose -f docker/development/docs-compose.yaml build --build-arg TURBO_TEAM="my-turbo-team" --build-arg TURBO_TOKEN="my-turbo-token"
+	docker compose -f docker/development/docs-compose.yaml build
 
 .PHONY: start-development
 start-development: ## Start the development docker container.

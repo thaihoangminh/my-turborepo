@@ -28,3 +28,5 @@ jobs:
           push: true
           tags: thaihoangminh/docs-development:latest
           file: docker/development/docs.dockerfile
+          secrets: |
+            "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
