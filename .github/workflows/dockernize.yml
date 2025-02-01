@@ -28,5 +28,7 @@ jobs:
           push: true
           tags: thaihoangminh/docs-development:latest
           file: docker/development/docs.dockerfile
+          build-args: |
+            TURBO_TEAM=${{ vars.TURBO_TEAM }}
           secrets: |
             "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
