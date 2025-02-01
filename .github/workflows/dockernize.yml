@@ -1,4 +1,4 @@
-name: ci
+name: Dockerized
 
 on:
   push:
@@ -26,5 +26,5 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: user/app:latest
+          tags: thaihoangminh/docs-development:v1.0
           file: docker/development/docs.dockerfile
