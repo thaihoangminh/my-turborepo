@@ -21,7 +21,7 @@ RUN pnpm install turbo --global
 COPY . .
 
 # Use secrets for TURBO_TOKEN during turbo prune
-RUN --mount=type=secret,id=TURBO_TOKEN,env=TURBO_TOKEN
+# RUN --mount=type=secret,id=TURBO_TOKEN,env=TURBO_TOKEN
 
 # Generate a partial monorepo with a pruned lockfile for a target workspace.
 # Assuming "docs" is the name entered in the project's package.json: { name: "docs" }
@@ -40,6 +40,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Build the project
 COPY --from=build /usr/src/app/out/full/ .
+RUN --mount=type=secret,id=TURBO_TOKEN,env=TURBO_TOKEN
 RUN pnpm turbo run build
 
 FROM base AS runner
