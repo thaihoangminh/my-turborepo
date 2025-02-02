@@ -3,10 +3,6 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-# Remote Caching
-ARG TURBO_TEAM
-ENV TURBO_TEAM=$TURBO_TEAM
-# End Remote Caching
 
 FROM base AS build
 RUN apk update
@@ -35,6 +31,10 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Build the project
 COPY --from=build /usr/src/app/out/full/ .
+
+ARG TURBO_TEAM
+ENV TURBO_TEAM=$TURBO_TEAM
+
 RUN --mount=type=secret,id=TURBO_TOKEN,env=TURBO_TOKEN \
     pnpm turbo run build
 
