@@ -1,4 +1,7 @@
 FROM node:22.13.1-alpine3.20 AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 # Remote Caching
 ARG TURBO_TEAM
@@ -14,10 +17,7 @@ WORKDIR /usr/src/app
 
 # Replace <your-major-version> with the major version installed in your repository. For example:
 # RUN yarn global add turbo@^2
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && \
-    pnpm install turbo --global
+RUN pnpm install turbo@^2 --global
 COPY . .
 
 # Use secrets for TURBO_TOKEN during turbo prune
@@ -35,7 +35,6 @@ WORKDIR /usr/src/app
 
 # First install the dependencies (as they change less often)
 COPY --from=build /usr/src/app/out/json/ .
-RUN corepack enable
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Build the project
