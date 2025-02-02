@@ -16,8 +16,8 @@ WORKDIR /usr/src/app
 # RUN yarn global add turbo@^2
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
-RUN pnpm install turbo --global
+RUN corepack enable && \
+    pnpm install turbo --global
 COPY . .
 
 # Use secrets for TURBO_TOKEN during turbo prune
@@ -40,8 +40,8 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Build the project
 COPY --from=build /usr/src/app/out/full/ .
-RUN --mount=type=secret,id=TURBO_TOKEN,env=TURBO_TOKEN
-RUN pnpm turbo run build
+RUN --mount=type=secret,id=TURBO_TOKEN,env=TURBO_TOKEN \
+    pnpm turbo run build
 
 FROM base AS runner
 WORKDIR /usr/src/app
