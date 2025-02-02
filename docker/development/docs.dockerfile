@@ -35,6 +35,9 @@ COPY --from=build /usr/src/app/out/full/ .
 ARG TURBO_TEAM
 ENV TURBO_TEAM=$TURBO_TEAM
 
+ARG TURBO_TOKEN
+ENV TURBO_TOKEN=$TURBO_TOKEN
+
 RUN --mount=type=secret,id=TURBO_TOKEN,env=TURBO_TOKEN \
     pnpm turbo run build
 
