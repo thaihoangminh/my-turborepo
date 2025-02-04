@@ -31,4 +31,4 @@ jobs:
           build-args: |
             TURBO_TEAM=${{ vars.TURBO_TEAM }}
           secrets: |
-            "TURBO_TOKEN=${{ secrets.TURBO_TOKEN }}"
+            "turbo_token=${{ secrets.TURBO_TOKEN }}"
