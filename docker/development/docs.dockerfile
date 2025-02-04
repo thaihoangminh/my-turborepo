@@ -8,7 +8,6 @@ RUN apk update
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 
-
 WORKDIR /usr/src/app
 RUN pnpm add -g turbo
 COPY . .
@@ -22,7 +21,7 @@ WORKDIR /usr/src/app
 
 # First install the dependencies (as they change less often)
 COPY --from=builder /usr/src/app/out/json/ .
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store CI=1 pnpm install --frozen-lockfile
 
 # Build the project
 COPY --from=builder /usr/src/app/out/full/ .
