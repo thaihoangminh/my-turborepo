@@ -1,6 +1,6 @@
 .PHONY: build-development
 build-development: ## Build the development docker image.
-	docker compose -f docker/development/docs-compose.yaml build
+	docker compose --progress=plain -f docker/development/docs-compose.yaml build
 
 .PHONY: start-development
 start-development: ## Start the development docker container.

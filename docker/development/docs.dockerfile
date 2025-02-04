@@ -1,22 +1,16 @@
-FROM node:22.13.1-alpine3.20 AS base
+FROM node:18-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN corepack enable && corepack install -g pnpm@9.15.4
 
-
-FROM base AS build
+FROM base AS builder
 RUN apk update
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /usr/src/app
-
-# Replace <your-major-version> with the major version installed in your repository. For example:
-# RUN yarn global add turbo@^2
-RUN pnpm install turbo@^2 --global
+RUN pnpm add -g turbo
 COPY . .
-# Generate a partial monorepo with a pruned lockfile for a target workspace.
-# Assuming "docs" is the name entered in the project's package.json: { name: "docs" }
 RUN turbo prune docs --docker
 
 # Add lockfile and package.json's of isolated subworkspace
@@ -26,20 +20,17 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 
 # First install the dependencies (as they change less often)
-COPY --from=build /usr/src/app/out/json/ .
+COPY --from=builder /usr/src/app/out/json/ .
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Build the project
-COPY --from=build /usr/src/app/out/full/ .
+COPY --from=builder /usr/src/app/out/full/ .
 
 ARG TURBO_TEAM
 ENV TURBO_TEAM=$TURBO_TEAM
 
-ARG TURBO_TOKEN
-ENV TURBO_TOKEN=$TURBO_TOKEN
-
-RUN --mount=type=secret,id=TURBO_TOKEN,env=TURBO_TOKEN \
-    pnpm turbo run build
+RUN --mount=type=secret,id=turbo_token,env=TURBO_TOKEN \
+    pnpm turbo build
 
 FROM base AS runner
 WORKDIR /usr/src/app

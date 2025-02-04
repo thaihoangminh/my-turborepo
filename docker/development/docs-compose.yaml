@@ -4,9 +4,13 @@ services:
       context: ../../
       dockerfile: docker/development/docs.dockerfile
       secrets:
-        - TURBO_TOKEN
+        - turbo_token
     environment:
       TURBO_TEAM: ${TURBO_TEAM}
     image: docs-development:latest
     ports:
       - "3001:3000"
+
+secrets:
+  turbo_token:
+    environment: TURBO_TOKEN
