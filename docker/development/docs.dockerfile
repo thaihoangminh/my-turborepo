@@ -21,7 +21,7 @@ WORKDIR /usr/src/app
 
 # First install the dependencies (as they change less often)
 COPY --from=builder /usr/src/app/out/json/ .
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store CI=1 pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install -F docs --frozen-lockfile --force
 
 # Build the project
 COPY --from=builder /usr/src/app/out/full/ .
