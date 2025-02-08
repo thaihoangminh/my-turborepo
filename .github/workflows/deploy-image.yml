@@ -47,11 +47,10 @@ jobs:
         id: push
         uses: docker/build-push-action@v6
         with:
-#          context: .
+          context: .
           push: true
-#          tags: ${{ steps.meta.outputs.tags }}
-          tags: thaihoangminh/docs-development:latest
-#          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           file: docker/development/docs.dockerfile
           build-args: |
             TURBO_TEAM=${{ vars.TURBO_TEAM }}
