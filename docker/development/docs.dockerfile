@@ -49,7 +49,9 @@ COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/.next/static 
 COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/public ./apps/docs/public
 
 ENV NODE_ENV=production \
-    PORT=3000
+    PORT=3000 \
+    NEXT_TELEMETRY_DISABLED=1 \
+    HOSTNAME="0.0.0.0"
 
 EXPOSE 3000
 
