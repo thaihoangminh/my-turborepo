@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1.10.0
+
 FROM node:18-alpine AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -29,6 +31,9 @@ COPY --from=builder /usr/src/app/out/full/ .
 ARG TURBO_TEAM
 ENV TURBO_TEAM=$TURBO_TEAM
 
+ENV TURBO_TELEMETRY_DISABLED=1
+ENV DO_NOT_TRACK=1
+
 RUN --mount=type=secret,id=turbo_token,env=TURBO_TOKEN \
     pnpm turbo build
 
@@ -47,7 +52,8 @@ COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/.next/static 
 COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/public ./apps/docs/public
 
 ENV NODE_ENV=production \
-    PORT=3000
+    PORT=3000 \
+    HOSTNAME="0.0.0.0"
 
 EXPOSE 3000
 
