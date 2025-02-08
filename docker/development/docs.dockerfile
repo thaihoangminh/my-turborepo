@@ -31,6 +31,8 @@ COPY --from=builder /usr/src/app/out/full/ .
 ARG TURBO_TEAM
 ENV TURBO_TEAM=$TURBO_TEAM
 
+ENV TURBO_TELEMETRY_DISABLED=1
+
 RUN --mount=type=secret,id=turbo_token,env=TURBO_TOKEN \
     pnpm turbo build
 
@@ -50,7 +52,6 @@ COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/public ./apps
 
 ENV NODE_ENV=production \
     PORT=3000 \
-    TURBO_TELEMETRY_DISABLED=1 \
     HOSTNAME="0.0.0.0"
 
 EXPOSE 3000
