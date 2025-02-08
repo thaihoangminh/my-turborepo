@@ -50,7 +50,7 @@ COPY --from=installer --chown=nextjs:nodejs /usr/src/app/apps/docs/public ./apps
 
 ENV NODE_ENV=production \
     PORT=3000 \
-    NEXT_TELEMETRY_DISABLED=1 \
+    TURBO_TELEMETRY_DISABLED=1 \
     HOSTNAME="0.0.0.0"
 
 EXPOSE 3000
