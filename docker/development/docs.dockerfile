@@ -32,6 +32,7 @@ ARG TURBO_TEAM
 ENV TURBO_TEAM=$TURBO_TEAM
 
 ENV TURBO_TELEMETRY_DISABLED=1
+ENV DO_NOT_TRACK=1
 
 RUN --mount=type=secret,id=turbo_token,env=TURBO_TOKEN \
     pnpm turbo build
