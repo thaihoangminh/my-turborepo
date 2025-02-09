@@ -54,6 +54,7 @@ jobs:
           file: docker/development/docs.dockerfile
           build-args: |
             TURBO_TEAM=${{ vars.TURBO_TEAM }}
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
           secrets: |
             "turbo_token=${{ secrets.TURBO_TOKEN }}"
 
