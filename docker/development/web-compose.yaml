@@ -1,9 +1,9 @@
 name: my-turborepo-development
 services:
-  docs-development:
+  web-development:
     build:
       context: ../../
-      dockerfile: docker/development/docs.dockerfile
+      dockerfile: docker/development/web.dockerfile
       secrets:
         - turbo_token
       args:
@@ -12,7 +12,7 @@ services:
     environment:
       - HOSTNAME="0.0.0.0"
       - PORT=${PORT}
-    image: docs-development:latest
+    image: web-development:latest
     ports:
       - "${PORT}:${PORT}"
 
