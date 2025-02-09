@@ -33,9 +33,6 @@ jobs:
     strategy:
       matrix:
         environment: [ development, staging, production ]
-        # Here we use the same Dockerfile for all environments.
-        # Change this if you want a different Dockerfile per environment.
-        dockerfile: docker/development/web.dockerfile
 
     # Only run this job when the branch matches the expected one for the given environment.
     # - development runs only on the "dev" branch.
@@ -74,7 +71,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          file: ${{ matrix.dockerfile }}
+          file: docker/development/web.dockerfile
           build-args: |
             TURBO_TEAM=${{ vars.TURBO_TEAM }}
             NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
