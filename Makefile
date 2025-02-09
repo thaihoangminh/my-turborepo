@@ -1,14 +1,26 @@
-.PHONY: build-development
-build-development: ## Build the development docker image.
+.PHONY: build-docs-development
+build-docs-development: ## Build the development docker image.
 	docker compose --progress=plain -f docker/development/docs-compose.yaml build
 
-.PHONY: start-development
-start-development: ## Start the development docker container.
+.PHONY: start-docs-development
+start-docs-development: ## Start the development docker container.
 	docker compose -f docker/development/docs-compose.yaml up -d
 
-.PHONY: stop-development
-stop-development: ## Stop the development docker container.
+.PHONY: stop-docs-development
+stop-docs-development: ## Stop the development docker container.
 	docker compose -f docker/development/docs-compose.yaml down
+
+.PHONY: build-web-development
+build-web-development: ## Build the development docker image.
+	docker compose --progress=plain -f docker/development/web-compose.yaml build
+
+.PHONY: start-web-development
+start-web-development: ## Start the development docker container.
+	docker compose -f docker/development/web-compose.yaml up -d
+
+.PHONY: stop-web-development
+stop-web-development: ## Stop the development docker container.
+	docker compose -f docker/development/web-compose.yaml down
 
 #.PHONY: build-staging
 #build-staging: ## Build the staging docker image.
