@@ -35,7 +35,7 @@ jobs:
         environment: [ development, staging, production ]
         # Here we use the same Dockerfile for all environments.
         # Change this if you want a different Dockerfile per environment.
-        dockerfile: "docker/development/web.dockerfile"
+        dockerfile: docker/development/web.dockerfile
 
     # Only run this job when the branch matches the expected one for the given environment.
     # - development runs only on the "dev" branch.
