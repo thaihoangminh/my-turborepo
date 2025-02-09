@@ -12,7 +12,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /usr/src/app
 RUN pnpm add -g turbo
 COPY . .
-RUN turbo prune docs --docker
+RUN turbo prune web --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS build
@@ -43,8 +43,8 @@ USER nextjs
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=build --chown=nextjs:nodejs /usr/src/app/apps/docs/.next/standalone ./
-COPY --from=build --chown=nextjs:nodejs /usr/src/app/apps/docs/.next/static ./apps/docs/.next/static
-COPY --from=build --chown=nextjs:nodejs /usr/src/app/apps/docs/public ./apps/docs/public
+COPY --from=build --chown=nextjs:nodejs /usr/src/app/apps/web/.next/standalone ./
+COPY --from=build --chown=nextjs:nodejs /usr/src/app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=build --chown=nextjs:nodejs /usr/src/app/apps/web/public ./apps/web/public
 
-CMD ["node", "apps/docs/server.js"]
+CMD ["node", "apps/web/server.js"]

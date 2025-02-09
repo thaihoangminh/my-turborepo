@@ -1,0 +1,89 @@
+name: Create and publish a Docker image (web)
+
+on:
+  push:
+    branches:
+      - "dev"
+      - "release/*"
+      - "main"
+  pull_request:
+    branches:
+      - "dev"
+      - "release/*"
+      - "main"
+
+# Defines two custom environment variables for the workflow. These are used for the Container registry domain, and a name for the Docker image that this workflow builds.
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}-web
+
+# There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    # Common permissions for all steps in this job
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    # Define a matrix with the three environments.
+    # (If needed, you can also vary the Dockerfile path per environment.)
+    strategy:
+      matrix:
+        environment: [ development, staging, production ]
+        # Here we use the same Dockerfile for all environments.
+        # Change this if you want a different Dockerfile per environment.
+        dockerfile: docker/development/web.dockerfile
+
+    # Only run this job when the branch matches the expected one for the given environment.
+    # - development runs only on the "dev" branch.
+    # - staging runs on either "staging" or any branch starting with "refs/heads/release/"
+    # - production runs only on the "main" branch.
+    if: >
+      (matrix.environment == 'development' && github.ref == 'refs/heads/dev') ||
+      (matrix.environment == 'staging' && startsWith(github.ref, 'refs/heads/release/')) ||
+      (matrix.environment == 'production' && github.ref == 'refs/heads/main')
+
+    # Set the GitHub environment (used for deployment approvals, secrets, etc.)
+    environment: ${{ matrix.environment }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          file: ${{ matrix.dockerfile }}
+          build-args: |
+            TURBO_TEAM=${{ vars.TURBO_TEAM }}
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+          secrets: |
+            "turbo_token=${{ secrets.TURBO_TOKEN }}"
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
